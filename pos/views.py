@@ -1,10 +1,19 @@
 from django.shortcuts import render
+from rest_framework.filters import SearchFilter
+from django.db.models import Avg, Count, Min, Sum
+from django.db.models.functions import TruncDate
+import datetime
 from rest_framework import status
+from rest_framework import generics
 from rest_framework import viewsets
 from rest_framework.filters import SearchFilter
 from rest_framework.response import Response
 from .models import Currency, Sales, SalesItem
-from .serializers import CurrencySerializer, SalesSerializer, SalesItemSerializer
+from .pagination import StandardResultsSetPagination
+from .serializers import CurrencySerializer, SalesSerializer, SalesItemSerializer, SalesDailyUSDListSerializer, \
+    SalesDailyZWLListSerializer, SalesMonthlyUSDListSerializer, SalesMonthlyZWLListSerializer, \
+    SalesItemDailyProductUSDListSerializer, SalesItemDailyProductZWLListSerializer
+
 
 # Create your views here.
 class CurrencyViewSet(viewsets.ModelViewSet):
@@ -16,25 +25,58 @@ class CurrencyViewSet(viewsets.ModelViewSet):
 
 
 class SalesViewSet(viewsets.ModelViewSet):
-    queryset = Sales.objects.all()
+    queryset = Sales.objects.prefetch_related('sales_items').all()
     serializer_class = SalesSerializer
-
-    #def create(self, request):
-    #    sales_serializer = SalesSerializer(data=request.data)
-    #    sales_serializer.is_valid(raise_exception=True)
-    #    sales = sales_serializer.save()
-    #    print(sales)
-    #    if request.data['sales_items']:
-    #        for item in request.data['sales_items']:
-    #            sales_item = SalesItemSerializer(data=item)
-    #            sales_item.is_valid(raise_exception=True)
-    #            sales_item.save(sales=sales)
-
-    #    return Response(serializer.data, status=201)
-
-
-    
+ 
 
 class SalesItemViewSet(viewsets.ModelViewSet):
     queryset = SalesItem.objects.all()
     serializer_class = SalesItemSerializer
+    search_fields = ['created_at']
+    pagination_class = StandardResultsSetPagination
+
+
+class SalesDailyUSDViewSet(viewsets.ModelViewSet):
+    queryset = Sales.objects.raw("SELECT id, DATE(created_at) AS date, currency, SUM(grandtotal) AS grandtotal, SUM(quantity_total) AS quantity_total FROM pos_sales WHERE currency='USD' GROUP BY date ORDER BY date DESC;")
+    serializer_class = SalesDailyUSDListSerializer
+    search_fields = ['created_at']
+    pagination_class = StandardResultsSetPagination
+
+
+class SalesDailyZWLViewSet(viewsets.ModelViewSet):
+    queryset = Sales.objects.raw("SELECT id, DATE(created_at) AS date, currency, SUM(grandtotal) AS grandtotal, SUM(quantity_total) AS quantity_total FROM pos_sales WHERE currency='ZWL' GROUP BY date ORDER BY date DESC;")
+    serializer_class = SalesDailyZWLListSerializer
+    search_fields = ['created_at']
+    pagination_class = StandardResultsSetPagination
+
+
+class SalesMonthlyUSDViewSet(viewsets.ModelViewSet):
+    queryset = Sales.objects.raw("SELECT id, MONTH(created_at) AS date, currency, SUM(grandtotal) AS grandtotal, SUM(quantity_total) AS quantity_total FROM pos_sales WHERE currency='USD' GROUP BY date ORDER BY date DESC;")
+    serializer_class = SalesMonthlyUSDListSerializer
+    search_fields = ['created_at']
+    pagination_class = StandardResultsSetPagination
+
+
+class SalesMonthlyZWLViewSet(viewsets.ModelViewSet):
+    queryset = Sales.objects.raw("SELECT id, MONTH(created_at) AS date, currency, SUM(grandtotal) AS grandtotal, SUM(quantity_total) AS quantity_total FROM pos_sales WHERE currency='ZWL' GROUP BY date ORDER BY date DESC;")
+    serializer_class = SalesMonthlyUSDListSerializer
+    search_fields = ['created_at']
+    pagination_class = StandardResultsSetPagination
+
+
+class SalesItemDailyProductUSDViewSet(viewsets.ModelViewSet):
+    queryset = SalesItem.objects.raw("SELECT id, product_name, DATE(created_at) AS date, currency, SUM(total_price) AS total_price, SUM(quantity_sold) AS quantity_sold FROM pos_salesitem WHERE currency='USD' GROUP BY date, product_name ORDER BY date DESC;")
+    serializer_class = SalesItemDailyProductUSDListSerializer
+    http_method_names = ['get', 'head', 'options']
+    search_fields = ['created_at']
+    pagination_class = StandardResultsSetPagination
+
+
+class SalesItemDailyProductZWLViewSet(viewsets.ModelViewSet):
+    queryset = SalesItem.objects.raw("SELECT id, product_name, DATE(created_at) AS date, currency, SUM(total_price) AS total_price, SUM(quantity_sold) AS quantity_sold FROM pos_salesitem WHERE currency='ZWL' GROUP BY date, product_name ORDER BY date DESC;")
+    serializer_class = SalesItemDailyProductZWLListSerializer
+    http_method_names = ['get', 'head', 'options']
+    search_fields = ['created_at']
+    pagination_class = StandardResultsSetPagination
+
+    

@@ -18,7 +18,9 @@ from django.contrib import admin
 from django.urls import path, include
 from rest_framework import routers
 from product.views import ProductViewSet, CategoryViewSet
-from pos.views import CurrencyViewSet, SalesViewSet, SalesItemViewSet
+from pos.views import CurrencyViewSet, SalesViewSet, SalesItemViewSet, SalesDailyUSDViewSet, \
+    SalesDailyZWLViewSet, SalesMonthlyUSDViewSet, SalesMonthlyZWLViewSet, \
+    SalesItemDailyProductUSDViewSet, SalesItemDailyProductZWLViewSet
 
 
 router = routers.DefaultRouter()
@@ -26,7 +28,13 @@ router.register('product', ProductViewSet, basename='product')
 router.register('category', CategoryViewSet, basename='category')
 router.register('currency', CurrencyViewSet, basename='currency')
 router.register('sales', SalesViewSet, basename='sales')
+router.register('sales/daily/usd', SalesDailyUSDViewSet, basename='sales-daily-usd')
+router.register('sales/daily/zwl', SalesDailyZWLViewSet, basename='sales-daily-zwl')
+router.register('sales/monthly/usd', SalesMonthlyUSDViewSet, basename='sales-monthly-usd')
+router.register('sales/monthly/zwl', SalesMonthlyZWLViewSet, basename='sales-monthly-zwl')
 router.register('salesitem', SalesItemViewSet, basename='salesitem')
+router.register('salesitem/daily/product/usd', SalesItemDailyProductUSDViewSet, basename='salesitem-daily-product-usd')
+router.register('salesitem/daily/product/zwl', SalesItemDailyProductZWLViewSet, basename='salesitem-daily-product-zwl')
 
 
 urlpatterns = [

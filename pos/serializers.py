@@ -36,3 +36,39 @@ class SalesSerializer(serializers.ModelSerializer):
             quantity = product.quantity - quantity_sold
             Product.objects.filter(id=product_id).update(quantity=quantity)
         return sales
+
+
+class SalesDailyUSDListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Sales
+        fields = ['currency', 'created_at', 'quantity_total', 'grandtotal']
+
+
+class SalesDailyZWLListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Sales
+        fields = ['currency', 'created_at', 'quantity_total', 'grandtotal']
+
+
+class SalesMonthlyUSDListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Sales
+        fields = ['currency', 'created_at', 'quantity_total', 'grandtotal']
+
+
+class SalesMonthlyZWLListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Sales
+        fields = ['currency', 'created_at', 'quantity_total', 'grandtotal']
+
+
+class SalesItemDailyProductUSDListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SalesItem
+        fields = ['product_name','currency', 'created_at', 'quantity_sold', 'total_price']
+
+
+class SalesItemDailyProductZWLListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SalesItem
+        fields = ['product_name','currency', 'created_at', 'quantity_sold', 'total_price']
