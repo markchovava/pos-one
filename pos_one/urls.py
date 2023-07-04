@@ -16,11 +16,16 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from rest_framework_simplejwt.views import (
+    TokenObtainPairView,
+    TokenRefreshView,
+)
 from rest_framework import routers
 from product.views import ProductViewSet, CategoryViewSet
-from pos.views import CurrencyViewSet, SalesViewSet, SalesItemViewSet, SalesDailyUSDViewSet, \
-    SalesDailyZWLViewSet, SalesMonthlyUSDViewSet, SalesMonthlyZWLViewSet, \
-    SalesItemDailyProductUSDViewSet, SalesItemDailyProductZWLViewSet
+from core.views import UserSalesViewSet
+from pos.views import CurrencyViewSet, SalesViewSet, SalesItemViewSet, SalesDailyUSDViewSet, SalesDailyZWLViewSet, SalesMonthlyUSDViewSet, \
+    SalesMonthlyZWLViewSet, SalesItemDailyProductUSDViewSet, SalesItemDailyProductZWLViewSet, ProductSalesItemByDayUSDViewSet, \
+    ProductSalesItemByDayZWLViewSet
 
 
 router = routers.DefaultRouter()
@@ -28,6 +33,7 @@ router.register('product', ProductViewSet, basename='product')
 router.register('category', CategoryViewSet, basename='category')
 router.register('currency', CurrencyViewSet, basename='currency')
 router.register('sales', SalesViewSet, basename='sales')
+router.register('user/sales', UserSalesViewSet, basename='user-sales')
 router.register('sales/daily/usd', SalesDailyUSDViewSet, basename='sales-daily-usd')
 router.register('sales/daily/zwl', SalesDailyZWLViewSet, basename='sales-daily-zwl')
 router.register('sales/monthly/usd', SalesMonthlyUSDViewSet, basename='sales-monthly-usd')
@@ -35,9 +41,16 @@ router.register('sales/monthly/zwl', SalesMonthlyZWLViewSet, basename='sales-mon
 router.register('salesitem', SalesItemViewSet, basename='salesitem')
 router.register('salesitem/daily/product/usd', SalesItemDailyProductUSDViewSet, basename='salesitem-daily-product-usd')
 router.register('salesitem/daily/product/zwl', SalesItemDailyProductZWLViewSet, basename='salesitem-daily-product-zwl')
+router.register('salesitem/byday/product/usd', ProductSalesItemByDayUSDViewSet, basename='salesitem-byday-product-usd')
+router.register('salesitem/byday/product/zwl', ProductSalesItemByDayZWLViewSet, basename='salesitem-byday-product-zwl')
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('', include(router.urls)),
+    path('auth/', include('djoser.urls')),
+    path('auth/', include('djoser.urls.jwt')),
+
 ]

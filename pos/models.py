@@ -1,5 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import User
+from django.conf import settings
 from product.models import Product
 
 
@@ -8,7 +8,7 @@ from product.models import Product
 class Currency(models.Model):
    name = models.CharField(max_length=255)
    rate = models.IntegerField(null=True, blank=True)
-   user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+   user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True)
    created_at = models.DateTimeField(auto_now_add=True)
    updated_at = models.DateTimeField(auto_now=True)
 
@@ -20,7 +20,7 @@ class Currency(models.Model):
 
 
 class Sales(models.Model):
-   user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+   user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True)
    grandtotal = models.BigIntegerField(null=True, blank=True)
    amount_paid = models.BigIntegerField(null=True, blank=True)
    subtotal = models.BigIntegerField(null=True, blank=True)
@@ -42,7 +42,7 @@ class Sales(models.Model):
 
 class SalesItem(models.Model):
    sales = models.ForeignKey(Sales, on_delete=models.CASCADE, related_name='sales_items', null=True)
-   user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+   user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True)
    product = models.ForeignKey(Product, on_delete=models.CASCADE, null=True)
    product_name = models.CharField(max_length=255, null=True, blank=True)
    unit_price = models.IntegerField(null=True, blank=True)

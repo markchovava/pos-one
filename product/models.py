@@ -1,6 +1,5 @@
+from django.conf import settings
 from django.db import models
-from django.contrib.auth.models import User
-
 
 
 class Category(models.Model):
@@ -8,7 +7,7 @@ class Category(models.Model):
    description = models.TextField(null=True, blank=True)
    created_at = models.DateTimeField(auto_now_add=True)
    updated_at = models.DateTimeField(auto_now=True)
-   user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+   user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True)
    def __str__(self) -> str:
       return self.name
    class Meta:
@@ -25,7 +24,7 @@ class Product(models.Model):
    category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='product', null=True)
    created_at = models.DateTimeField(auto_now_add=True)
    updated_at = models.DateTimeField(auto_now=True)
-   user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+   user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True)
    def __str__(self) -> str:
       return self.name
    class Meta:

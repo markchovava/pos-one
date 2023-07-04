@@ -65,10 +65,22 @@ class SalesMonthlyZWLListSerializer(serializers.ModelSerializer):
 class SalesItemDailyProductUSDListSerializer(serializers.ModelSerializer):
     class Meta:
         model = SalesItem
-        fields = ['product_name','currency', 'created_at', 'quantity_sold', 'total_price']
+        fields = ['product_name', 'currency', 'created_at', 'quantity_sold', 'total_price']
 
 
 class SalesItemDailyProductZWLListSerializer(serializers.ModelSerializer):
     class Meta:
         model = SalesItem
         fields = ['product_name','currency', 'created_at', 'quantity_sold', 'total_price']
+
+
+class ProductSalesItemByDayUSDSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SalesItem
+        fields = ['product_name', 'currency', 'created_at', 'quantity_sold', 'total_price']
+
+
+class ProductSalesItemByDayZWLSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SalesItem
+        fields = ['product_name', 'currency', 'created_at', 'quantity_sold', 'total_price']
