@@ -22,7 +22,7 @@ from rest_framework_simplejwt.views import (
 )
 from rest_framework import routers
 from product.views import ProductViewSet, CategoryViewSet
-from core.views import UserSalesViewSet
+from core.views import UserAllViewSet
 from pos.views import CurrencyViewSet, SalesViewSet, SalesItemViewSet, SalesDailyUSDViewSet, SalesDailyZWLViewSet, SalesMonthlyUSDViewSet, \
     SalesMonthlyZWLViewSet, SalesItemDailyProductUSDViewSet, SalesItemDailyProductZWLViewSet, ProductSalesItemByDayUSDViewSet, \
     ProductSalesItemByDayZWLViewSet
@@ -32,8 +32,8 @@ router = routers.DefaultRouter()
 router.register('product', ProductViewSet, basename='product')
 router.register('category', CategoryViewSet, basename='category')
 router.register('currency', CurrencyViewSet, basename='currency')
+router.register('users', UserAllViewSet, basename='users-all')
 router.register('sales', SalesViewSet, basename='sales')
-router.register('user/sales', UserSalesViewSet, basename='user-sales')
 router.register('sales/daily/usd', SalesDailyUSDViewSet, basename='sales-daily-usd')
 router.register('sales/daily/zwl', SalesDailyZWLViewSet, basename='sales-daily-zwl')
 router.register('sales/monthly/usd', SalesMonthlyUSDViewSet, basename='sales-monthly-usd')
