@@ -9,8 +9,8 @@ class Currency(models.Model):
    name = models.CharField(max_length=255)
    rate = models.IntegerField(null=True, blank=True)
    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True)
-   created_at = models.DateTimeField(auto_now_add=True)
-   updated_at = models.DateTimeField(auto_now=True)
+   created_at = models.DateField(auto_now_add=True)
+   updated_at = models.DateField(auto_now=True)
 
    def __str__(self) -> str:
       return self.name
@@ -30,8 +30,8 @@ class Sales(models.Model):
    owing = models.BigIntegerField(null=True, blank=True)
    currency = models.CharField(max_length=255, null=True, blank=True)
    payment_method = models.CharField(max_length=255, null=True, blank=True)
-   created_at = models.DateTimeField(auto_now_add=True)
-   updated_at = models.DateTimeField(auto_now=True)
+   created_at = models.DateField(auto_now_add=True)
+   updated_at = models.DateField(auto_now=True)
 
    def __str__(self) -> str:
       return self.grandtotal
@@ -49,8 +49,8 @@ class SalesItem(models.Model):
    total_price = models.IntegerField(null=True, blank=True)
    quantity_sold = models.IntegerField(null=True, blank=True)
    currency = models.CharField(max_length=255, null=True, blank=True)
-   created_at = models.DateTimeField(auto_now_add=True)
-   updated_at = models.DateTimeField(auto_now=True)
+   created_at = models.DateField(auto_now_add=True)
+   updated_at = models.DateField(auto_now=True)
 
    def __str__(self) -> str:
       return self.product_name

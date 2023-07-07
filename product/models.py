@@ -5,8 +5,8 @@ from django.db import models
 class Category(models.Model):
    name = models.CharField(max_length=255)
    description = models.TextField(null=True, blank=True)
-   created_at = models.DateTimeField(auto_now_add=True)
-   updated_at = models.DateTimeField(auto_now=True)
+   created_at = models.DateField(auto_now_add=True)
+   updated_at = models.DateField(auto_now=True)
    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True)
    def __str__(self) -> str:
       return self.name
@@ -22,8 +22,8 @@ class Product(models.Model):
    unit_price = models.IntegerField(null=True, blank=True)
    quantity = models.IntegerField(null=True, blank=True)
    category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='product', null=True)
-   created_at = models.DateTimeField(auto_now_add=True)
-   updated_at = models.DateTimeField(auto_now=True)
+   created_at = models.DateField(auto_now_add=True)
+   updated_at = models.DateField(auto_now=True)
    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True)
    def __str__(self) -> str:
       return self.name

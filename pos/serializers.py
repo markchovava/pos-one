@@ -2,7 +2,9 @@ from django.db import transaction
 from rest_framework import serializers
 from .models import Currency, Sales, SalesItem
 from product.models import Product
-import pprint
+from core.serializers import UserSerializer
+
+
 
 class CurrencySerializer(serializers.ModelSerializer):
    user_id = serializers.IntegerField(allow_null=True)
@@ -14,6 +16,7 @@ class CurrencySerializer(serializers.ModelSerializer):
 class SalesItemSerializer(serializers.ModelSerializer):
     sales = serializers.PrimaryKeyRelatedField(read_only=True)
     product_id = serializers.IntegerField(allow_null=True)
+    user_id = serializers.IntegerField(allow_null=True)
     class Meta:
         model = SalesItem
         fields = ['id', 'sales', 'product_id', 'user_id', 'product_name', 'unit_price', 'total_price', 'quantity_sold', 'currency', 'created_at', 'updated_at']
@@ -21,9 +24,11 @@ class SalesItemSerializer(serializers.ModelSerializer):
 
 class SalesSerializer(serializers.ModelSerializer):
     sales_items = SalesItemSerializer(many=True)
+    user = UserSerializer(read_only=True)
+    user_id = serializers.IntegerField(allow_null=True)
     class Meta:
         model = Sales
-        fields = ['id', 'user', 'grandtotal', 'quantity_total', 'amount_paid', 'subtotal', 'tax', 'payment_method', 'change', 'owing', 'currency', 'sales_items', 'created_at', 'updated_at']
+        fields = ['id', 'user', 'user_id', 'grandtotal', 'quantity_total', 'amount_paid', 'subtotal', 'tax', 'payment_method', 'change', 'owing', 'currency', 'sales_items', 'created_at', 'updated_at']
 
     def create(self, validated_data):
         sales_items_data = validated_data.pop('sales_items')
@@ -38,6 +43,9 @@ class SalesSerializer(serializers.ModelSerializer):
         return sales
 
 
+
+""" --------------------------DAY--------------------- """
+
 class SalesDailyUSDListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Sales
@@ -45,18 +53,6 @@ class SalesDailyUSDListSerializer(serializers.ModelSerializer):
 
 
 class SalesDailyZWLListSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Sales
-        fields = ['currency', 'created_at', 'quantity_total', 'grandtotal']
-
-
-class SalesMonthlyUSDListSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Sales
-        fields = ['currency', 'created_at', 'quantity_total', 'grandtotal']
-
-
-class SalesMonthlyZWLListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Sales
         fields = ['currency', 'created_at', 'quantity_total', 'grandtotal']
@@ -84,3 +80,38 @@ class ProductSalesItemByDayZWLSerializer(serializers.ModelSerializer):
     class Meta:
         model = SalesItem
         fields = ['product_name', 'currency', 'created_at', 'quantity_sold', 'total_price']
+
+
+
+""" --------------------------MONTH--------------------- """
+
+
+class SalesMonthlyUSDListSerializer(serializers.ModelSerializer):
+    month = serializers.IntegerField(source='created_at__month')
+    year = serializers.IntegerField(source='created_at__year')
+    class Meta:
+        model = Sales
+        fields = ['currency', 'month', 'year', 'created_at', 'quantity_total', 'grandtotal']
+
+
+class SalesMonthlyZWLListSerializer(serializers.ModelSerializer):
+    month = serializers.IntegerField(source='created_at__month')
+    year = serializers.IntegerField(source='created_at__year')
+    class Meta:
+        model = Sales
+        fields = ['currency', 'month', 'year', 'created_at', 'quantity_total', 'grandtotal']
+
+class ProductSalesItemMonthlyUSDSerializer(serializers.ModelSerializer):
+    month = serializers.IntegerField(source='created_at__month')
+    year = serializers.IntegerField(source='created_at__year')
+    class Meta:
+        model = SalesItem
+        fields = ['product_name', 'currency', 'month', 'year', 'quantity_sold', 'total_price']
+
+
+class ProductSalesItemMonthlyZWLSerializer(serializers.ModelSerializer):
+    month = serializers.IntegerField(source='created_at__month')
+    year = serializers.IntegerField(source='created_at__year')
+    class Meta:
+        model = SalesItem
+        fields = ['product_name', 'currency', 'month', 'year', 'quantity_sold', 'total_price']

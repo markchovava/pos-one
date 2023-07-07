@@ -8,4 +8,6 @@ class User(AbstractUser):
   access_level = models.IntegerField(null=True, blank=True)
   phone_number = models.CharField(max_length=255, null=True, blank=True)
   address = models.TextField(null=True, blank=True)
+  created_at = models.DateField(auto_now_add=True)
+  updated_at = models.DateField(auto_now=True)
 
