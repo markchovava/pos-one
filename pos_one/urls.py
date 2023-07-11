@@ -25,13 +25,16 @@ from product.views import ProductViewSet, CategoryViewSet
 from core.views import UserAllViewSet
 from pos.views import CurrencyViewSet, SalesViewSet, SalesItemViewSet, SalesDailyUSDViewSet, SalesDailyZWLViewSet, SalesMonthlyUSDViewSet, \
     SalesMonthlyZWLViewSet, SalesItemDailyProductUSDViewSet, SalesItemDailyProductZWLViewSet, ProductSalesItemMonthlyUSDViewSet, \
-    ProductSalesItemMonthlyZWLViewSet
+    ProductSalesItemMonthlyZWLViewSet, UserMonthlySalesViewSet, UserDailySalesViewSet, SalesByUserSerializer
+
+
 
 router = routers.DefaultRouter()
 router.register('product', ProductViewSet, basename='product')
 router.register('category', CategoryViewSet, basename='category')
 router.register('currency', CurrencyViewSet, basename='currency')
 router.register('users', UserAllViewSet, basename='users-all')
+""" SALES """
 router.register('sales', SalesViewSet, basename='sales')
 router.register('sales/daily/usd', SalesDailyUSDViewSet, basename='sales-daily-usd')
 router.register('sales/daily/zwl', SalesDailyZWLViewSet, basename='sales-daily-zwl')
@@ -42,6 +45,9 @@ router.register('salesitem/daily/product/usd', SalesItemDailyProductUSDViewSet, 
 router.register('salesitem/daily/product/zwl', SalesItemDailyProductZWLViewSet, basename='salesitem-daily-product-zwl')
 router.register('sales/monthly/product/usd', ProductSalesItemMonthlyUSDViewSet, basename='sales-product-monthly-usd')
 router.register('sales/monthly/product/zwl', ProductSalesItemMonthlyZWLViewSet, basename='sales-product-monthly-zwl')
+router.register('sales/monthly/byuser', UserMonthlySalesViewSet, basename='sales-monthly-byuser')
+router.register('sales/daily/byuser', UserDailySalesViewSet, basename='sales-daily-byuser')
+router.register('sales/byuser', SalesByUserSerializer, basename='sales-byuser')
 
 
 urlpatterns = [

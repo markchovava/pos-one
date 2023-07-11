@@ -1,6 +1,7 @@
 from django.db import transaction
 from rest_framework import serializers
 from .models import Currency, Sales, SalesItem
+from core.models import User
 from product.models import Product
 from core.serializers import UserSerializer
 
@@ -28,7 +29,7 @@ class SalesSerializer(serializers.ModelSerializer):
     user_id = serializers.IntegerField(allow_null=True)
     class Meta:
         model = Sales
-        fields = ['id', 'user', 'user_id', 'grandtotal', 'quantity_total', 'amount_paid', 'subtotal', 'tax', 'payment_method', 'change', 'owing', 'currency', 'sales_items', 'created_at', 'updated_at']
+        fields = ['id', 'user', 'user_id', 'ref_no', 'grandtotal', 'quantity_total', 'amount_paid', 'subtotal', 'tax', 'payment_method', 'change', 'owing', 'currency', 'sales_items', 'created_at', 'updated_at']
 
     def create(self, validated_data):
         sales_items_data = validated_data.pop('sales_items')
@@ -41,6 +42,7 @@ class SalesSerializer(serializers.ModelSerializer):
             quantity = product.quantity - quantity_sold
             Product.objects.filter(id=product_id).update(quantity=quantity)
         return sales
+
 
 
 
@@ -85,7 +87,6 @@ class ProductSalesItemByDayZWLSerializer(serializers.ModelSerializer):
 
 """ --------------------------MONTH--------------------- """
 
-
 class SalesMonthlyUSDListSerializer(serializers.ModelSerializer):
     month = serializers.IntegerField(source='created_at__month')
     year = serializers.IntegerField(source='created_at__year')
@@ -101,6 +102,7 @@ class SalesMonthlyZWLListSerializer(serializers.ModelSerializer):
         model = Sales
         fields = ['currency', 'month', 'year', 'created_at', 'quantity_total', 'grandtotal']
 
+
 class ProductSalesItemMonthlyUSDSerializer(serializers.ModelSerializer):
     month = serializers.IntegerField(source='created_at__month')
     year = serializers.IntegerField(source='created_at__year')
@@ -115,3 +117,44 @@ class ProductSalesItemMonthlyZWLSerializer(serializers.ModelSerializer):
     class Meta:
         model = SalesItem
         fields = ['product_name', 'currency', 'month', 'year', 'quantity_sold', 'total_price']
+
+
+class UserMonthlySalesSerializer(serializers.ModelSerializer):
+    #user = UserSerializer(read_only=True)
+    month = serializers.IntegerField(source='created_at__month')
+    year = serializers.IntegerField(source='created_at__year')
+
+    def get_user(self, obj):
+        user_id = obj.user_id
+        user = User.objects.get(pk=user_id)
+        return user
+  
+    class Meta:
+        model = Sales
+        fields = ['created_at', 'user', 'user_id', 'currency', 'month', 'year', 'quantity_total', 'grandtotal']
+
+
+class UserDailySalesSerializer(serializers.ModelSerializer):
+    #user = UserSerializer(read_only=True)
+
+    def get_user(self, obj):
+        user_id = obj.user_id
+        user = User.objects.get(pk=user_id)
+        return user
+  
+    class Meta:
+        model = Sales
+        fields = ['created_at', 'user', 'user_id', 'currency', 'quantity_total', 'grandtotal']
+
+    
+""" -------------------------- USER SALES --------------------- """
+
+class SalesByUserSerializer(serializers.ModelSerializer):
+    sales_items = SalesItemSerializer(many=True)
+    user = UserSerializer(read_only=True)
+    user_id = serializers.IntegerField(allow_null=True)
+    class Meta:
+        model = Sales
+        fields = ['id', 'user', 'user_id', 'ref_no', 'grandtotal', 'quantity_total', 'amount_paid', 'subtotal', 'tax', 'payment_method', 'change', 'owing', 'currency', 'sales_items', 'created_at', 'updated_at']
+
+   

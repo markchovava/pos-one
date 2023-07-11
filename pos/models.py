@@ -20,6 +20,7 @@ class Currency(models.Model):
 
 
 class Sales(models.Model):
+   ref_no = models.BigIntegerField(null=True, blank=True)
    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True)
    grandtotal = models.BigIntegerField(null=True, blank=True)
    amount_paid = models.BigIntegerField(null=True, blank=True)
