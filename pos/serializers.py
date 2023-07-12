@@ -120,7 +120,7 @@ class ProductSalesItemMonthlyZWLSerializer(serializers.ModelSerializer):
 
 
 class UserMonthlySalesSerializer(serializers.ModelSerializer):
-    #user = UserSerializer(read_only=True)
+    user = UserSerializer(read_only=True)
     month = serializers.IntegerField(source='created_at__month')
     year = serializers.IntegerField(source='created_at__year')
 
@@ -135,7 +135,7 @@ class UserMonthlySalesSerializer(serializers.ModelSerializer):
 
 
 class UserDailySalesSerializer(serializers.ModelSerializer):
-    #user = UserSerializer(read_only=True)
+    user = UserSerializer(read_only=True)
 
     def get_user(self, obj):
         user_id = obj.user_id
@@ -155,6 +155,6 @@ class SalesByUserSerializer(serializers.ModelSerializer):
     user_id = serializers.IntegerField(allow_null=True)
     class Meta:
         model = Sales
-        fields = ['id', 'user', 'user_id', 'ref_no', 'grandtotal', 'quantity_total', 'amount_paid', 'subtotal', 'tax', 'payment_method', 'change', 'owing', 'currency', 'sales_items', 'created_at', 'updated_at']
+        fields = '__all__'
 
    

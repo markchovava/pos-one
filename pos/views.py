@@ -166,18 +166,18 @@ class UserDailySalesViewSet(viewsets.ModelViewSet):
 class SalesByUserViewSet(viewsets.ModelViewSet):
     queryset = Sales.objects.all()
     serializer_class = SalesByUserSerializer
-    filter_backends = [SearchFilter]
-    search_fields = ['created_at']
+    """ filter_backends = [SearchFilter]
+    search_fields = ['ref_no']
     pagination_class = StandardResultsSetPagination
-    ordering_fields = ['-created_at']
+    ordering_fields = ['-created_at'] """
 
-    def get_queryset(self):
-        queryset = super().get_queryset()
+    """ def get_queryset(self):
         #user_id = self.request.query_params.get('user_id')
-        user_id = self.request.GET.get("user_id")
-        if user_id:
-            queryset = queryset.filter(user_id=user_id)
-        return queryset
+        queryset = Sales.queryset.filter(user_id=2)
+        if user_id is not None:
+            queryset = Sales.queryset.filter(user_id=2).values('currency', 'user_id', 'created_at')
+        return queryset """
+
 
 
     
