@@ -44,8 +44,6 @@ class SalesSerializer(serializers.ModelSerializer):
         return sales
 
 
-
-
 """ --------------------------DAY--------------------- """
 
 class SalesDailyUSDListSerializer(serializers.ModelSerializer):
@@ -148,13 +146,23 @@ class UserDailySalesSerializer(serializers.ModelSerializer):
 
     
 """ -------------------------- USER SALES --------------------- """
-
-class SalesByUserSerializer(serializers.ModelSerializer):
+class SalesAllByUserSerializer(serializers.ModelSerializer):
     sales_items = SalesItemSerializer(many=True)
     user = UserSerializer(read_only=True)
     user_id = serializers.IntegerField(allow_null=True)
     class Meta:
         model = Sales
-        fields = '__all__'
+        fields = ['id', 'user', 'user_id', 'ref_no', 'grandtotal', 'quantity_total', 'currency', 'sales_items', 'created_at' ] 
+
+
+class SalesLatestByUserSerializer(serializers.ModelSerializer):
+    sales_items = SalesItemSerializer(many=True)
+    user = UserSerializer(read_only=True)
+    user_id = serializers.IntegerField(allow_null=True)
+    class Meta:
+        model = Sales
+        fields = ['id', 'user', 'user_id', 'ref_no', 'grandtotal', 'quantity_total', 'currency', 'sales_items', 'created_at' ] 
 
    
+  
+       

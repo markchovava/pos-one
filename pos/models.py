@@ -35,7 +35,7 @@ class Sales(models.Model):
    updated_at = models.DateField(auto_now=True)
 
    def __str__(self) -> str:
-      return self.grandtotal
+      return str(self.ref_no)
 
    class Meta:
       ordering = ['grandtotal', '-created_at', '-updated_at']

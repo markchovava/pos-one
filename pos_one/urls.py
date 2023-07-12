@@ -25,7 +25,8 @@ from product.views import ProductViewSet, CategoryViewSet
 from core.views import UserAllViewSet
 from pos.views import CurrencyViewSet, SalesViewSet, SalesItemViewSet, SalesDailyUSDViewSet, SalesDailyZWLViewSet, SalesMonthlyUSDViewSet, \
     SalesMonthlyZWLViewSet, SalesItemDailyProductUSDViewSet, SalesItemDailyProductZWLViewSet, ProductSalesItemMonthlyUSDViewSet, \
-    ProductSalesItemMonthlyZWLViewSet, UserMonthlySalesViewSet, UserDailySalesViewSet, SalesByUserViewSet
+    ProductSalesItemMonthlyZWLViewSet, UserMonthlySalesViewSet, UserDailySalesViewSet, \
+    SalesAllByUserViewSet, SalesLatestByUserViewSet
 
 
 
@@ -47,7 +48,8 @@ router.register('sales/monthly/product/usd', ProductSalesItemMonthlyUSDViewSet, 
 router.register('sales/monthly/product/zwl', ProductSalesItemMonthlyZWLViewSet, basename='sales-product-monthly-zwl')
 router.register('sales/monthly/byuser', UserMonthlySalesViewSet, basename='sales-monthly-byuser')
 router.register('sales/daily/byuser', UserDailySalesViewSet, basename='sales-daily-byuser')
-router.register('sales/byuser', SalesByUserViewSet, basename='sales-byuser')
+router.register('sales/byuser/all', SalesAllByUserViewSet, basename='sales-byuser-all')
+router.register('sales/byuser/latest', SalesLatestByUserViewSet, basename='sales-byuser-latest')
 
 
 urlpatterns = [
