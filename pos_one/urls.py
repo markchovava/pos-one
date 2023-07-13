@@ -22,7 +22,7 @@ from rest_framework_simplejwt.views import (
 )
 from rest_framework import routers
 from product.views import ProductViewSet, CategoryViewSet
-from core.views import UserAllViewSet
+from core.views import UserAllViewSet, AppInfoViewSet
 from pos.views import CurrencyViewSet, SalesViewSet, SalesItemViewSet, SalesDailyUSDViewSet, SalesDailyZWLViewSet, SalesMonthlyUSDViewSet, \
     SalesMonthlyZWLViewSet, SalesItemDailyProductUSDViewSet, SalesItemDailyProductZWLViewSet, ProductSalesItemMonthlyUSDViewSet, \
     ProductSalesItemMonthlyZWLViewSet, UserMonthlySalesViewSet, UserDailySalesViewSet, \
@@ -31,6 +31,9 @@ from pos.views import CurrencyViewSet, SalesViewSet, SalesItemViewSet, SalesDail
 
 
 router = routers.DefaultRouter()
+""" APP INFO """
+router.register('app-info', AppInfoViewSet, basename='app-info-viewset')
+"""  """
 router.register('product', ProductViewSet, basename='product')
 router.register('category', CategoryViewSet, basename='category')
 router.register('currency', CurrencyViewSet, basename='currency')
@@ -50,6 +53,7 @@ router.register('sales/monthly/byuser', UserMonthlySalesViewSet, basename='sales
 router.register('sales/daily/byuser', UserDailySalesViewSet, basename='sales-daily-byuser')
 router.register('sales/byuser/all', SalesAllByUserViewSet, basename='sales-byuser-all')
 router.register('sales/byuser/latest', SalesLatestByUserViewSet, basename='sales-byuser-latest')
+
 
 
 urlpatterns = [

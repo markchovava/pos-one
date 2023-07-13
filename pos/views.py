@@ -31,7 +31,7 @@ class SalesViewSet(viewsets.ModelViewSet):
     queryset = Sales.objects.prefetch_related('sales_items').all()
     serializer_class = SalesSerializer
     filter_backends = [SearchFilter, OrderingFilter]
-    search_fields = ['created_at']
+    search_fields = ['ref_no']
     pagination_class = StandardResultsSetPagination
     ordering_fields = ['-created_at']
  
@@ -40,7 +40,7 @@ class SalesItemViewSet(viewsets.ModelViewSet):
     queryset = SalesItem.objects.all()
     serializer_class = SalesItemSerializer
     filter_backends = [SearchFilter, OrderingFilter]
-    search_fields = ['created_at']
+    search_fields = ['product_name', 'created_at']
     pagination_class = StandardResultsSetPagination
     ordering_fields = ['-created_at']
 
