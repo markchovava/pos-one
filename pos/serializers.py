@@ -161,7 +161,7 @@ class SalesLatestByUserSerializer(serializers.ModelSerializer):
     user_id = serializers.IntegerField(allow_null=True)
     class Meta:
         model = Sales
-        fields = ['id', 'user', 'user_id', 'ref_no', 'grandtotal', 'quantity_total', 'currency', 'sales_items', 'created_at' ] 
+        fields = ['id', 'user', 'user_id', 'ref_no', 'grandtotal', 'subtotal', 'tax', 'quantity_total', 'currency', 'sales_items', 'created_at' ] 
 
    
   

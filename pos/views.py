@@ -28,7 +28,7 @@ class CurrencyViewSet(viewsets.ModelViewSet):
 """ ---------------------------- SALES ------------------------- """
 
 class SalesViewSet(viewsets.ModelViewSet):
-    queryset = Sales.objects.prefetch_related('sales_items').all()
+    queryset = Sales.objects.prefetch_related('sales_items').all().order_by('-created_at')
     serializer_class = SalesSerializer
     filter_backends = [SearchFilter, OrderingFilter]
     search_fields = ['ref_no']
@@ -37,7 +37,7 @@ class SalesViewSet(viewsets.ModelViewSet):
  
 
 class SalesItemViewSet(viewsets.ModelViewSet):
-    queryset = SalesItem.objects.all()
+    queryset = SalesItem.objects.all().order_by('-created_at')
     serializer_class = SalesItemSerializer
     filter_backends = [SearchFilter, OrderingFilter]
     search_fields = ['product_name', 'created_at']
@@ -47,7 +47,7 @@ class SalesItemViewSet(viewsets.ModelViewSet):
 
 """ ---------------------------- DAILY ------------------------- """
 class SalesDailyUSDViewSet(viewsets.ModelViewSet):
-    queryset = Sales.objects.values('currency', 'created_at').filter(currency='USD').annotate( grandtotal=Sum('grandtotal'), quantity_total=Sum('quantity_total'))
+    queryset = Sales.objects.values('currency', 'created_at').filter(currency='USD').annotate( grandtotal=Sum('grandtotal'), quantity_total=Sum('quantity_total')).order_by('-created_at')
     serializer_class = SalesDailyUSDListSerializer
     filter_backends = [SearchFilter, OrderingFilter]
     search_fields = ['created_at']
@@ -56,7 +56,7 @@ class SalesDailyUSDViewSet(viewsets.ModelViewSet):
 
 
 class SalesDailyZWLViewSet(viewsets.ModelViewSet):
-    queryset = Sales.objects.values('currency', 'created_at').filter(currency='ZWL').annotate( grandtotal=Sum('grandtotal'), quantity_total=Sum('quantity_total'))
+    queryset = Sales.objects.values('currency', 'created_at').filter(currency='ZWL').annotate( grandtotal=Sum('grandtotal'), quantity_total=Sum('quantity_total')).order_by('-created_at')
     serializer_class = SalesDailyZWLListSerializer
     filter_backends = [SearchFilter, OrderingFilter]
     search_fields = ['created_at']
@@ -65,47 +65,47 @@ class SalesDailyZWLViewSet(viewsets.ModelViewSet):
 
 
 class SalesItemDailyProductUSDViewSet(viewsets.ModelViewSet):
-    queryset = SalesItem.objects.values('product_name', 'currency', 'created_at').filter(currency='USD').annotate(total_price=Sum('total_price'), quantity_sold=Sum('quantity_sold'))
+    queryset = SalesItem.objects.values('product_name', 'currency', 'created_at').filter(currency='USD').annotate(total_price=Sum('total_price'), quantity_sold=Sum('quantity_sold')).order_by('-created_at')
     serializer_class = SalesItemDailyProductUSDListSerializer
     http_method_names = ['get', 'head', 'options']
     search_fields = ['product_name']
     filter_backends = [SearchFilter, OrderingFilter]
     search_fields = ['created_at', 'product_name']
     pagination_class = StandardResultsSetPagination
-    ordering_fields = ['-created_at', 'product_name']
+    ordering_fields = ['-created_at']
 
 
 class SalesItemDailyProductZWLViewSet(viewsets.ModelViewSet):
-    queryset = SalesItem.objects.values('product_name', 'currency', 'created_at').filter(currency='ZWL').annotate(total_price=Sum('total_price'), quantity_sold=Sum('quantity_sold'))
+    queryset = SalesItem.objects.values('product_name', 'currency', 'created_at').filter(currency='ZWL').annotate(total_price=Sum('total_price'), quantity_sold=Sum('quantity_sold')).order_by('-created_at')
     serializer_class = SalesItemDailyProductZWLListSerializer
     http_method_names = ['get', 'head', 'options']
     search_fields = ['product_name']
     filter_backends = [SearchFilter, OrderingFilter]
     pagination_class = StandardResultsSetPagination
-    ordering_fields = ['-created_at', 'product_name']
+    ordering_fields = ['-created_at']
 
 
 """ ---------------------------- MONTHLY ----------------------- """
 class SalesMonthlyUSDViewSet(viewsets.ModelViewSet):
-    queryset = Sales.objects.values('currency', 'created_at__month', 'created_at__year').filter(currency='USD').annotate(grandtotal=Sum('grandtotal'), quantity_total=Sum('quantity_total'))
+    queryset = Sales.objects.values('currency', 'created_at__month', 'created_at__year').filter(currency='USD').annotate(grandtotal=Sum('grandtotal'), quantity_total=Sum('quantity_total')).order_by('-created_at__month', '-created_at__year')
     serializer_class = SalesMonthlyUSDListSerializer
     filter_backends = [SearchFilter, OrderingFilter]
     search_fields = ['created_at']
     pagination_class = StandardResultsSetPagination
-    ordering_fields = ['-created_at']
+    ordering_fields = ['-created_at__month', '-created_at__year']
 
 
 class SalesMonthlyZWLViewSet(viewsets.ModelViewSet):
-    queryset = Sales.objects.values('currency', 'created_at__month', 'created_at__year').filter(currency='ZWL').annotate(grandtotal=Sum('grandtotal'), quantity_total=Sum('quantity_total'))
+    queryset = Sales.objects.values('currency', 'created_at__month', 'created_at__year').filter(currency='ZWL').annotate(grandtotal=Sum('grandtotal'), quantity_total=Sum('quantity_total')).order_by('-created_at__month', '-created_at__year')
     serializer_class = SalesMonthlyZWLListSerializer
-    filter_backends = [SearchFilter]
+    filter_backends = [SearchFilter, OrderingFilter]
     search_fields = ['created_at']
     pagination_class = StandardResultsSetPagination
-    ordering_fields = ['-created_at', 'product_name']
+    ordering_fields = ['created_at__month', 'created_at__year']
 
 
 class ProductSalesItemMonthlyUSDViewSet(viewsets.ModelViewSet):
-    queryset = SalesItem.objects.values('product_name', 'currency', 'created_at__month', 'created_at__year').filter(currency='USD').annotate(total_price=Sum('total_price'), quantity_sold=Sum('quantity_sold'))
+    queryset = SalesItem.objects.values('product_name', 'currency', 'created_at__month', 'created_at__year').filter(currency='USD').annotate(total_price=Sum('total_price'), quantity_sold=Sum('quantity_sold')).order_by('-created_at__month', '-created_at__year')
     serializer_class = ProductSalesItemMonthlyUSDSerializer
     http_method_names = ['get', 'head', 'options']
     search_fields = ['product_name']
@@ -115,7 +115,7 @@ class ProductSalesItemMonthlyUSDViewSet(viewsets.ModelViewSet):
 
 
 class ProductSalesItemMonthlyZWLViewSet(viewsets.ModelViewSet):
-    queryset = SalesItem.objects.values('product_name', 'currency', 'created_at__month', 'created_at__year').filter(currency='ZWL').annotate(total_price=Sum('total_price'), quantity_sold=Sum('quantity_sold'))
+    queryset = SalesItem.objects.values('product_name', 'currency', 'created_at__month', 'created_at__year').filter(currency='ZWL').annotate(total_price=Sum('total_price'), quantity_sold=Sum('quantity_sold')).order_by('-created_at__month', '-created_at__year')
     serializer_class = ProductSalesItemMonthlyZWLSerializer
     http_method_names = ['get', 'head', 'options']
     search_fields = ['product_name']
@@ -136,7 +136,7 @@ class UserMonthlySalesViewSet(viewsets.ModelViewSet):
         queryset = super().get_queryset()
         user_id = self.request.query_params.get('user_id')
         if user_id:
-            queryset = queryset.filter(user_id=user_id).values('currency', 'user_id', 'created_at__month', 'created_at__year').annotate(grandtotal=Sum('grandtotal'), quantity_total=Sum('quantity_total'))
+            queryset = queryset.filter(user_id=user_id).values('currency', 'user_id', 'created_at__month', 'created_at__year').annotate(grandtotal=Sum('grandtotal'), quantity_total=Sum('quantity_total')).order_by('-created_at__month', '-created_at__year')
         return queryset
 
 
@@ -152,22 +152,25 @@ class UserDailySalesViewSet(viewsets.ModelViewSet):
         queryset = super().get_queryset()
         user_id = self.request.query_params.get('user_id')
         if user_id:
-            queryset = queryset.filter(user_id=user_id).values('currency', 'user_id', 'created_at').annotate(grandtotal=Sum('grandtotal'), quantity_total=Sum('quantity_total'))
+            queryset = queryset.filter(user_id=user_id).values('currency', 'user_id', 'created_at').annotate(grandtotal=Sum('grandtotal'), quantity_total=Sum('quantity_total')).order_by('-created_at')
         return queryset
 
 
 
 """ -------------------------------------------------------------- """
 class SalesAllByUserViewSet(viewsets.ModelViewSet):
-    queryset = Sales.objects.prefetch_related('sales_items').all()
+    queryset = Sales.objects.prefetch_related('sales_items').all().order_by('-created_at')
     serializer_class = SalesAllByUserSerializer
+    filter_backends = [SearchFilter, OrderingFilter]
+    search_fields = ['ref_no']
+    pagination_class = StandardResultsSetPagination
+    ordering_fields = ['-created_at']
 
     def get_queryset(self):
         queryset = super().get_queryset()
         user_id = self.request.query_params.get('user_id')
         if user_id:
-            user_id = self.request.query_params.get('user_id')
-            queryset = queryset.filter(user_id=user_id)
+            queryset = queryset.filter(user_id=user_id).order_by('-created_at')
         return queryset
 
 
@@ -177,7 +180,9 @@ class SalesLatestByUserViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         queryset = super().get_queryset()
-
+        user_id = self.request.query_params.get('user_id')
+        if user_id:
+            queryset = queryset.prefetch_related('sales_items').filter(user_id=user_id).order_by('-created_at')
         return queryset[:1]
    
 
