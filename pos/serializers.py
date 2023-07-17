@@ -150,6 +150,12 @@ class SalesAllByUserSerializer(serializers.ModelSerializer):
     sales_items = SalesItemSerializer(many=True)
     user = UserSerializer(read_only=True)
     user_id = serializers.IntegerField(allow_null=True)
+
+    def get_user(self, obj):
+        user_id = obj.user_id
+        user = User.objects.get(pk=user_id)
+        return user
+
     class Meta:
         model = Sales
         fields = ['id', 'user', 'user_id', 'ref_no', 'grandtotal', 'quantity_total', 'currency', 'sales_items', 'created_at' ] 
@@ -159,10 +165,44 @@ class SalesLatestByUserSerializer(serializers.ModelSerializer):
     sales_items = SalesItemSerializer(many=True)
     user = UserSerializer(read_only=True)
     user_id = serializers.IntegerField(allow_null=True)
+
+    def get_user(self, obj):
+        user_id = obj.user_id
+        user = User.objects.get(pk=user_id)
+        return user
+
     class Meta:
         model = Sales
         fields = ['id', 'user', 'user_id', 'ref_no', 'grandtotal', 'subtotal', 'tax', 'quantity_total', 'currency', 'sales_items', 'created_at' ] 
 
    
-  
+class CurrentUserSalesDailySerializer(serializers.ModelSerializer):
+    user = UserSerializer(read_only=True)
+    user_id = serializers.IntegerField(allow_null=True)
+
+    def get_user(self, obj):
+        user_id = obj.user_id
+        user = User.objects.get(pk=user_id)
+        return user
+
+    class Meta:
+        model = Sales
+        fields = ['id', 'user', 'user_id', 'grandtotal', 'quantity_total', 'currency', 'created_at' ] 
+
+
+class CurrentUserSalesMonthlySerializer(serializers.ModelSerializer):
+    user = UserSerializer(read_only=True)
+    user_id = serializers.IntegerField(allow_null=True)
+    month = serializers.IntegerField(source='created_at__month')
+    year = serializers.IntegerField(source='created_at__year')
+
+    def get_user(self, obj):
+        user_id = obj.user_id
+        user = User.objects.get(pk=user_id)
+        return user
+
+    class Meta:
+        model = Sales
+        fields = ['id', 'user_id', 'month', 'year', 'user', 'grandtotal', 'quantity_total', 'currency', 'created_at' ] 
+ 
        

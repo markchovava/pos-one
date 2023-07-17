@@ -13,7 +13,8 @@ from .models import Currency, Sales, SalesItem
 from .serializers import CurrencySerializer, SalesSerializer, SalesItemSerializer, SalesDailyUSDListSerializer, SalesDailyZWLListSerializer, \
     SalesMonthlyUSDListSerializer, SalesMonthlyZWLListSerializer, SalesItemDailyProductUSDListSerializer, SalesItemDailyProductZWLListSerializer, \
     ProductSalesItemByDayUSDSerializer, ProductSalesItemByDayZWLSerializer, ProductSalesItemMonthlyUSDSerializer, ProductSalesItemMonthlyZWLSerializer, \
-    UserMonthlySalesSerializer, UserDailySalesSerializer, SalesAllByUserSerializer, SalesLatestByUserSerializer
+    UserMonthlySalesSerializer, UserDailySalesSerializer, SalesAllByUserSerializer, SalesLatestByUserSerializer, CurrentUserSalesDailySerializer, \
+    CurrentUserSalesMonthlySerializer
 
 
 """ ---------------------------- CURRENCY ----------------------- """
@@ -26,7 +27,6 @@ class CurrencyViewSet(viewsets.ModelViewSet):
 
 
 """ ---------------------------- SALES ------------------------- """
-
 class SalesViewSet(viewsets.ModelViewSet):
     queryset = Sales.objects.prefetch_related('sales_items').all().order_by('-created_at')
     serializer_class = SalesSerializer
@@ -89,6 +89,7 @@ class SalesItemDailyProductZWLViewSet(viewsets.ModelViewSet):
 class SalesMonthlyUSDViewSet(viewsets.ModelViewSet):
     queryset = Sales.objects.values('currency', 'created_at__month', 'created_at__year').filter(currency='USD').annotate(grandtotal=Sum('grandtotal'), quantity_total=Sum('quantity_total')).order_by('-created_at__month', '-created_at__year')
     serializer_class = SalesMonthlyUSDListSerializer
+    http_method_names = ['get', 'head', 'options']
     filter_backends = [SearchFilter, OrderingFilter]
     search_fields = ['created_at']
     pagination_class = StandardResultsSetPagination
@@ -98,6 +99,7 @@ class SalesMonthlyUSDViewSet(viewsets.ModelViewSet):
 class SalesMonthlyZWLViewSet(viewsets.ModelViewSet):
     queryset = Sales.objects.values('currency', 'created_at__month', 'created_at__year').filter(currency='ZWL').annotate(grandtotal=Sum('grandtotal'), quantity_total=Sum('quantity_total')).order_by('-created_at__month', '-created_at__year')
     serializer_class = SalesMonthlyZWLListSerializer
+    http_method_names = ['get', 'head', 'options']
     filter_backends = [SearchFilter, OrderingFilter]
     search_fields = ['created_at']
     pagination_class = StandardResultsSetPagination
@@ -157,7 +159,7 @@ class UserDailySalesViewSet(viewsets.ModelViewSet):
 
 
 
-""" -------------------------------------------------------------- """
+""" -------------------------USER ------------------------------------- """
 class SalesAllByUserViewSet(viewsets.ModelViewSet):
     queryset = Sales.objects.prefetch_related('sales_items').all().order_by('-created_at')
     serializer_class = SalesAllByUserSerializer
@@ -184,6 +186,42 @@ class SalesLatestByUserViewSet(viewsets.ModelViewSet):
         if user_id:
             queryset = queryset.prefetch_related('sales_items').filter(user_id=user_id).order_by('-created_at')
         return queryset[:1]
+
+
+
+class CurrentUserSalesDailyViewset(viewsets.ModelViewSet):
+    queryset = Sales.objects.prefetch_related('sales_items').all()
+    serializer_class = CurrentUserSalesDailySerializer
+    http_method_names = ['get', 'head', 'options']
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        user_id = self.request.query_params.get('user_id')
+        if user_id:
+            # DAILY REPORT
+            queryset = queryset.filter(user_id=user_id) \
+                        .values('created_at', 'currency', 'user_id') \
+                        .annotate(grandtotal=Sum('grandtotal'), quantity_total=Sum('quantity_total')) \
+                        .order_by('-created_at')
+        return queryset
+
+
+class CurrentUserSalesMonthlyViewset(viewsets.ModelViewSet):
+    queryset = Sales.objects.prefetch_related('sales_items').all()
+    serializer_class = CurrentUserSalesMonthlySerializer
+    http_method_names = ['get', 'head', 'options']
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        user_id = self.request.query_params.get('user_id')
+        if user_id:
+            # MONTHLY REPORT
+            queryset = queryset.filter(user_id=user_id) \
+                        .values('created_at__month', 'created_at__year', 'currency', 'user_id') \
+                        .annotate(grandtotal=Sum('grandtotal'), quantity_total=Sum('quantity_total')) \
+                        .order_by( '-created_at__year', '-created_at__month' )
+        return queryset        
+
    
 
 
