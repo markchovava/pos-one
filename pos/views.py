@@ -193,6 +193,7 @@ class CurrentUserSalesDailyViewset(viewsets.ModelViewSet):
     queryset = Sales.objects.prefetch_related('sales_items').all()
     serializer_class = CurrentUserSalesDailySerializer
     http_method_names = ['get', 'head', 'options']
+    pagination_class = StandardResultsSetPagination
 
     def get_queryset(self):
         queryset = super().get_queryset()
@@ -210,6 +211,7 @@ class CurrentUserSalesMonthlyViewset(viewsets.ModelViewSet):
     queryset = Sales.objects.prefetch_related('sales_items').all()
     serializer_class = CurrentUserSalesMonthlySerializer
     http_method_names = ['get', 'head', 'options']
+    pagination_class = StandardResultsSetPagination
 
     def get_queryset(self):
         queryset = super().get_queryset()
