@@ -43,8 +43,10 @@ INSTALLED_APPS = [
     'rest_framework',
     'djoser',
     'rest_framework_simplejwt',
+    # CUSTOM APPS
     'pos',
     'product',
+    'purchase',
     'core',
 ]
 
