@@ -23,7 +23,7 @@ class Supplier(models.Model):
 
 
 class Purchase(models.Model):
-    purchase_ref = models.BigIntegerField(null=True, blank=True)
+    purchase_ref = models.CharField(max_length=255, null=True, blank=True)
     supplier = models.ForeignKey(Supplier, on_delete=models.CASCADE, null=True)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True)
     purchase_total = models.BigIntegerField(null=True, blank=True)

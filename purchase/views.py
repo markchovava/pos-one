@@ -25,17 +25,17 @@ class SupplierViewSet(viewsets.ModelViewSet):
 
 # --------------------- PURCHASE --------------------- 
 class PurchaseViewSet(viewsets.ModelViewSet):
-  queryset = Purchase.objects.prefetch_related('purchase_items').all().order_by('-created_at')
+  queryset = Purchase.objects.prefetch_related('purchase_items').all().order_by('-created_at', '-id')
   serializer_class = PurchaseSerializer
   filter_backends = [SearchFilter, OrderingFilter]
-  search_fields = ['purchase_ref', 'name']
+  search_fields = ['purchase_ref', 'supplier_ref']
   pagination_class = StandardResultsSetPagination
   ordering_fields = ['-created_at']
 
 
 # --------------------- PURCHASE ITEM --------------------- 
 class PurchaseItemViewSet(viewsets.ModelViewSet):
-  queryset = PurchaseItem.objects.all().order_by('-created_at')
+  queryset = PurchaseItem.objects.all().order_by('-created_at', '-id')
   serializer_class = PurchaseItemSerializer
   filter_backends = [SearchFilter, OrderingFilter]
   search_fields = ['product_name', 'created_at']

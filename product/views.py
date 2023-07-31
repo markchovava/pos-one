@@ -11,7 +11,7 @@ from .serializers import ProductSerializer, EditProductSerializer, CategorySeria
 class ProductViewSet(viewsets.ModelViewSet):
   queryset = Product.objects.prefetch_related('category__product').all()
   filter_backends = [SearchFilter]
-  search_fields = ['name']
+  search_fields = ['name', 'barcode']
   ordering_fields = ['unit_price', 'updated_at']
   pagination_class = StandardResultsSetPagination
 

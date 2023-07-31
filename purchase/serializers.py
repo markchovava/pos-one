@@ -30,10 +30,11 @@ class PurchaseSerializer(serializers.ModelSerializer):
     user = UserSerializer(read_only=True)
     user_id = serializers.IntegerField(allow_null=True)
     supplier_id = serializers.IntegerField(allow_null=True)
+    supplier = SupplierSerializer(many=False, read_only=True)
     
     class Meta:
         model = Purchase
-        fields = ['id', 'user', 'user_id', 'purchase_ref', 'supplier_ref', 'supplier_id', 'supplier_name', 'purchase_total', 'quantity_total', 'amount_paid', 'payment_method', 'owing', 'currency', 'purchase_items', 'created_at', 'updated_at']
+        fields = ['id', 'user', 'user_id', 'purchase_ref', 'supplier_ref', 'supplier', 'supplier_id', 'supplier_name', 'purchase_total', 'quantity_total', 'amount_paid', 'payment_method', 'owing', 'currency', 'purchase_items', 'created_at', 'updated_at']
 
     def create(self, validated_data):
         purchase_items_data = validated_data.pop('purchase_items')
