@@ -49,3 +49,45 @@ class PurchaseSerializer(serializers.ModelSerializer):
         return purchase 
 
 
+# --------------------- PURCHASE ITEM BOUGHT PER DAY --------------------- 
+class PurchaseItemDailyProductUSDSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PurchaseItem
+        fields = ['product_name','currency', 'created_at', 'quantity_bought', 'total_cost']
+
+
+class PurchaseItemDailyProductZWLSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PurchaseItem
+        fields = ['product_name','currency', 'created_at', 'quantity_bought', 'total_cost']
+
+# --------------------- PURCHASE ITEM BOUGHT PER MONTH --------------------- 
+class PurchaseItemMonthlyProductUSDSerializer(serializers.ModelSerializer):
+    month = serializers.IntegerField(source='created_at__month')
+    year = serializers.IntegerField(source='created_at__year')
+    class Meta:
+        model = PurchaseItem
+        fields = ['product_name','currency',  'month', 'year', 'quantity_bought', 'total_cost']
+
+
+class PurchaseItemMonthlyProductZWLSerializer(serializers.ModelSerializer):
+    month = serializers.IntegerField(source='created_at__month')
+    year = serializers.IntegerField(source='created_at__year')
+    class Meta:
+        model = PurchaseItem
+        fields = ['product_name','currency', 'month', 'year', 'quantity_bought', 'total_cost']
+
+
+# --------------------- PURCHASE TO SUPPLIER --------------------- 
+class PurchaseMonthlySupplierSerializer(serializers.ModelSerializer):
+    month = serializers.IntegerField(source='created_at__month')
+    year = serializers.IntegerField(source='created_at__year')
+    class Meta:
+        model = Purchase
+        fields = ['currency', 'month', 'year', 'quantity_total', 'purchase_total']
+
+
+class PurchaseDailySupplierSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Purchase
+        fields = ['currency', 'created_at', 'quantity_total', 'purchase_total']

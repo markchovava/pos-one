@@ -13,7 +13,7 @@ class CurrencySerializer(serializers.ModelSerializer):
       model = Currency
       fields = ['id', 'name', 'rate', 'user_id']
 
-
+ 
 class SalesItemSerializer(serializers.ModelSerializer):
     sales = serializers.PrimaryKeyRelatedField(read_only=True)
     product_id = serializers.IntegerField(allow_null=True)

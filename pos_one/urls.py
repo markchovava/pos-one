@@ -21,9 +21,15 @@ from rest_framework_simplejwt.views import (
     TokenRefreshView,
 )
 from rest_framework import routers
+# --------------------- PRODUCT --------------------- 
 from product.views import ProductViewSet, CategoryViewSet
-from purchase.views import SupplierViewSet, PurchaseItemViewSet, PurchaseViewSet
+# --------------------- PURCHASE --------------------- 
+from purchase.views import SupplierViewSet, PurchaseItemViewSet, PurchaseViewSet, PurchaseItemDailyProductUSDViewSet, \
+    PurchaseItemDailyProductZWLViewSet, PurchaseItemMonthlyProductUSDViewSet, PurchaseItemMonthlyProductZWLViewSet, \
+    PurchaseMonthlySupplierViewSet, PurchaseDailySupplierViewSet
+# --------------------- CORE --------------------- 
 from core.views import UserAllViewSet, AppInfoViewSet
+# --------------------- POINT OF SALE --------------------- 
 from pos.views import CurrencyViewSet, SalesViewSet, SalesItemViewSet, SalesDailyUSDViewSet, SalesDailyZWLViewSet, SalesMonthlyUSDViewSet, \
     SalesMonthlyZWLViewSet, SalesItemDailyProductUSDViewSet, SalesItemDailyProductZWLViewSet, ProductSalesItemMonthlyUSDViewSet, \
     ProductSalesItemMonthlyZWLViewSet, UserMonthlySalesViewSet, UserDailySalesViewSet, SalesAllByUserViewSet, SalesLatestByUserViewSet, \
@@ -60,6 +66,12 @@ router.register('current-usermonthly/sales', CurrentUserSalesMonthlyViewset, bas
 router.register('supplier', SupplierViewSet)
 router.register('purchase', PurchaseViewSet)
 router.register('purchase-item', PurchaseItemViewSet)
+router.register('purchase-item-daily/usd', PurchaseItemDailyProductUSDViewSet, basename='purchase-item-daily-usd')
+router.register('purchase-item-daily/zwl', PurchaseItemDailyProductZWLViewSet, basename='purchase-item-daily-zwl')
+router.register('purchase-item-monthly/usd', PurchaseItemMonthlyProductUSDViewSet, basename='purchase-item-monthly-usd')
+router.register('purchase-item-monthly/zwl', PurchaseItemMonthlyProductZWLViewSet, basename='purchase-item-monthly-zwl')
+router.register('purchase-supplier-monthly', PurchaseMonthlySupplierViewSet, basename='purchase-supplier-monthly')
+router.register('purchase-supplier-daily', PurchaseDailySupplierViewSet, basename='purchase-supplier-daily')
 
 
 
