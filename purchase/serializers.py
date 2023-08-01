@@ -24,7 +24,6 @@ class PurchaseItemSerializer(serializers.ModelSerializer):
         model = PurchaseItem
         fields = ['id', 'purchase', 'product_id', 'user_id', 'product_name', 'unit_cost', 'total_cost', 'quantity_bought', 'currency', 'created_at', 'updated_at']
 
-
 class PurchaseSerializer(serializers.ModelSerializer):
     purchase_items = PurchaseItemSerializer(many=True)
     user = UserSerializer(read_only=True)
@@ -48,13 +47,11 @@ class PurchaseSerializer(serializers.ModelSerializer):
             Product.objects.filter(id=product_id).update(quantity=quantity)
         return purchase 
 
-
 # --------------------- PURCHASE ITEM BOUGHT PER DAY --------------------- 
 class PurchaseItemDailyProductUSDSerializer(serializers.ModelSerializer):
     class Meta:
         model = PurchaseItem
         fields = ['product_name','currency', 'created_at', 'quantity_bought', 'total_cost']
-
 
 class PurchaseItemDailyProductZWLSerializer(serializers.ModelSerializer):
     class Meta:
@@ -69,7 +66,6 @@ class PurchaseItemMonthlyProductUSDSerializer(serializers.ModelSerializer):
         model = PurchaseItem
         fields = ['product_name','currency',  'month', 'year', 'quantity_bought', 'total_cost']
 
-
 class PurchaseItemMonthlyProductZWLSerializer(serializers.ModelSerializer):
     month = serializers.IntegerField(source='created_at__month')
     year = serializers.IntegerField(source='created_at__year')
@@ -77,17 +73,19 @@ class PurchaseItemMonthlyProductZWLSerializer(serializers.ModelSerializer):
         model = PurchaseItem
         fields = ['product_name','currency', 'month', 'year', 'quantity_bought', 'total_cost']
 
-
 # --------------------- PURCHASE TO SUPPLIER --------------------- 
 class PurchaseMonthlySupplierSerializer(serializers.ModelSerializer):
     month = serializers.IntegerField(source='created_at__month')
     year = serializers.IntegerField(source='created_at__year')
+    supplier = SupplierSerializer(read_only=True)
+
     class Meta:
         model = Purchase
-        fields = ['currency', 'month', 'year', 'quantity_total', 'purchase_total']
+        fields = ['supplier', 'supplier_id', 'currency', 'month', 'year', 'quantity_total', 'purchase_total']
 
 
 class PurchaseDailySupplierSerializer(serializers.ModelSerializer):
+    supplier = SupplierSerializer(read_only=True)
     class Meta:
         model = Purchase
-        fields = ['currency', 'created_at', 'quantity_total', 'purchase_total']
+        fields = ['supplier', 'supplier_id', 'currency', 'created_at', 'quantity_total', 'purchase_total']

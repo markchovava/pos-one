@@ -22,7 +22,7 @@ from rest_framework_simplejwt.views import (
 )
 from rest_framework import routers
 # --------------------- PRODUCT --------------------- 
-from product.views import ProductViewSet, CategoryViewSet
+from product.views import ProductViewSet, ProductStockViewSet, CategoryViewSet
 # --------------------- PURCHASE --------------------- 
 from purchase.views import SupplierViewSet, PurchaseItemViewSet, PurchaseViewSet, PurchaseItemDailyProductUSDViewSet, \
     PurchaseItemDailyProductZWLViewSet, PurchaseItemMonthlyProductUSDViewSet, PurchaseItemMonthlyProductZWLViewSet, \
@@ -42,6 +42,7 @@ router = routers.DefaultRouter()
 router.register('app-info', AppInfoViewSet, basename='app-info-viewset')
 """  """
 router.register('product', ProductViewSet, basename='product')
+router.register('product-stock', ProductStockViewSet, basename='product-stock')
 router.register('category', CategoryViewSet, basename='category')
 router.register('currency', CurrencyViewSet, basename='currency')
 router.register('users', UserAllViewSet, basename='users-all')

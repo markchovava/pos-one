@@ -9,7 +9,7 @@ from .serializers import ProductSerializer, EditProductSerializer, CategorySeria
 # Create your views here.
 
 class ProductViewSet(viewsets.ModelViewSet):
-  queryset = Product.objects.prefetch_related('category__product').all()
+  queryset = Product.objects.prefetch_related('category__product').all().order_by('name')
   filter_backends = [SearchFilter]
   search_fields = ['name', 'barcode']
   ordering_fields = ['unit_price', 'updated_at']
@@ -19,6 +19,14 @@ class ProductViewSet(viewsets.ModelViewSet):
     if self.request.method == 'POST' or self.request.method == 'PATCH' or self.request.method == 'PUT':
       return EditProductSerializer
     return ProductSerializer
+
+class ProductStockViewSet(viewsets.ModelViewSet):
+  queryset = Product.objects.all().order_by('quantity')
+  serializer_class = ProductSerializer
+  filter_backends = [SearchFilter]
+  search_fields = ['name', 'barcode']
+  ordering_fields = ['unit_price', 'updated_at']
+  pagination_class = StandardResultsSetPagination
 
 
 class CategoryViewSet(viewsets.ModelViewSet):

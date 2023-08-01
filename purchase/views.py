@@ -28,7 +28,7 @@ class SupplierViewSet(viewsets.ModelViewSet):
 
 # --------------------- PURCHASE --------------------- 
 class PurchaseViewSet(viewsets.ModelViewSet):
-  queryset = Purchase.objects.prefetch_related('purchase_items').all().order_by('-created_at', '-id')
+  queryset = Purchase.objects.prefetch_related('user', 'purchase_items').all().order_by('-created_at', '-id')
   serializer_class = PurchaseSerializer
   filter_backends = [SearchFilter, OrderingFilter]
   search_fields = ['purchase_ref', 'supplier_ref']
@@ -99,8 +99,8 @@ class PurchaseMonthlySupplierViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         queryset = super().get_queryset()
         supplier_id = self.request.query_params.get('supplier_id')
-        if user_id:
-            queryset = queryset.filter(supplier_id=supplier_id).values('currency', 'supplier_id', 'created_at__year', 'created_at__month').annotate(purchase_total=Sum('purchase_total'), quantity_total=Sum('quantity_total')).order_by('-created_at__year', '-created_at__month')
+        if supplier_id:
+            queryset = queryset.prefetch_related('supplier').filter(supplier_id=supplier_id).values('currency', 'supplier_id', 'created_at__year', 'created_at__month').annotate(purchase_total=Sum('purchase_total'), quantity_total=Sum('quantity_total')).order_by('-created_at__year', '-created_at__month')
         return queryset
 
 
@@ -115,7 +115,7 @@ class PurchaseDailySupplierViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         queryset = super().get_queryset()
         supplier_id = self.request.query_params.get('supplier_id')
-        if user_id:
+        if supplier_id:
             queryset = queryset.filter(supplier_id=supplier_id).values('currency', 'supplier_id', 'created_at').annotate(purchase_total=Sum('purchase_total'), quantity_total=Sum('quantity_total')).order_by('-created_at')
         return queryset
 
