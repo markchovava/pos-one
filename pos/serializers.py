@@ -206,3 +206,9 @@ class CurrentUserSalesMonthlySerializer(serializers.ModelSerializer):
         fields = ['id', 'user_id', 'month', 'year', 'user', 'grandtotal', 'quantity_total', 'currency', 'created_at' ] 
  
        
+
+class AllSalesItemByDaySerializer(serializers.ModelSerializer):
+    
+    class Meta:
+        model = SalesItem
+        fields = ['product_id', 'product_name', 'currency', 'created_at', 'quantity_sold', 'total_price']

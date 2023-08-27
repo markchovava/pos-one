@@ -14,7 +14,7 @@ from .serializers import CurrencySerializer, SalesSerializer, SalesItemSerialize
     SalesMonthlyUSDListSerializer, SalesMonthlyZWLListSerializer, SalesItemDailyProductUSDListSerializer, SalesItemDailyProductZWLListSerializer, \
     ProductSalesItemByDayUSDSerializer, ProductSalesItemByDayZWLSerializer, ProductSalesItemMonthlyUSDSerializer, ProductSalesItemMonthlyZWLSerializer, \
     UserMonthlySalesSerializer, UserDailySalesSerializer, SalesAllByUserSerializer, SalesLatestByUserSerializer, CurrentUserSalesDailySerializer, \
-    CurrentUserSalesMonthlySerializer
+    CurrentUserSalesMonthlySerializer, AllSalesItemByDaySerializer
 
 
 """ ---------------------------- CURRENCY ----------------------- """
@@ -45,7 +45,7 @@ class SalesItemViewSet(viewsets.ModelViewSet):
     ordering_fields = ['-created_at']
 
 
-""" ---------------------------- DAILY ------------------------- """
+# ---------------------------- DAILY ------------------------- """
 class SalesDailyUSDViewSet(viewsets.ModelViewSet):
     queryset = Sales.objects.values('currency', 'created_at').filter(currency='USD').annotate( grandtotal=Sum('grandtotal'), quantity_total=Sum('quantity_total')).order_by('-created_at')
     serializer_class = SalesDailyUSDListSerializer
@@ -85,7 +85,7 @@ class SalesItemDailyProductZWLViewSet(viewsets.ModelViewSet):
     ordering_fields = ['-created_at']
 
 
-""" ---------------------------- MONTHLY ----------------------- """
+# """ ---------------------------- MONTHLY ----------------------- """
 class SalesMonthlyUSDViewSet(viewsets.ModelViewSet):
     queryset = Sales.objects.values('currency', 'created_at__month', 'created_at__year').filter(currency='USD').annotate(grandtotal=Sum('grandtotal'), quantity_total=Sum('quantity_total')).order_by('-created_at__month', '-created_at__year')
     serializer_class = SalesMonthlyUSDListSerializer
@@ -188,7 +188,7 @@ class SalesLatestByUserViewSet(viewsets.ModelViewSet):
         return queryset[:1]
 
 
-
+""" ------------------------- CURRENT USER ------------------------------------- """
 class CurrentUserSalesDailyViewset(viewsets.ModelViewSet):
     queryset = Sales.objects.prefetch_related('sales_items').all()
     serializer_class = CurrentUserSalesDailySerializer
@@ -224,8 +224,56 @@ class CurrentUserSalesMonthlyViewset(viewsets.ModelViewSet):
                         .order_by( '-created_at__year', '-created_at__month' )
         return queryset        
 
-   
 
+# ---------------------------- ALL SALES BY DAY ----------------------------------------------------------- 
+class AllSalesItemByDayUSDViewSet(viewsets.ModelViewSet):
+    queryset = SalesItem.objects.all().order_by('product_name', '-created_at')
+    serializer_class = AllSalesItemByDaySerializer
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        created_at = self.request.query_params.get('created_at')
+        if created_at:
+            queryset = queryset.filter(currency='USD', created_at=created_at).order_by('product_name')
+        return queryset
+
+
+class AllSalesItemByDayZWLViewSet(viewsets.ModelViewSet):
+    queryset = SalesItem.objects.all().order_by('product_name', '-created_at')
+    serializer_class = AllSalesItemByDaySerializer
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        created_at = self.request.query_params.get('created_at')
+        if created_at:
+            queryset = queryset.filter(currency='ZWL', created_at=created_at).order_by('product_name')
+        return queryset
+
+
+class AllSalesItemByDayPaginatedUSDViewSet(viewsets.ModelViewSet):
+    queryset = SalesItem.objects.all().order_by('product_name', '-created_at')
+    serializer_class = AllSalesItemByDaySerializer
+    pagination_class = StandardResultsSetPagination
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        created_at = self.request.query_params.get('created_at')
+        if created_at:
+            queryset = queryset.filter(currency='USD', created_at=created_at).order_by('product_name')
+        return queryset
+
+
+class AllSalesItemByDayPaginatedZWLViewSet(viewsets.ModelViewSet):
+    queryset = SalesItem.objects.all().order_by('product_name', '-created_at')
+    serializer_class = AllSalesItemByDaySerializer
+    pagination_class = StandardResultsSetPagination
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        created_at = self.request.query_params.get('created_at')
+        if created_at:
+            queryset = queryset.filter(currency='ZWL', created_at=created_at).order_by('product_name')
+        return queryset
 
 
 

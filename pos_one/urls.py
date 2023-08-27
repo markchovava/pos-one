@@ -33,20 +33,21 @@ from core.views import UserAllViewSet, AppInfoViewSet
 from pos.views import CurrencyViewSet, SalesViewSet, SalesItemViewSet, SalesDailyUSDViewSet, SalesDailyZWLViewSet, SalesMonthlyUSDViewSet, \
     SalesMonthlyZWLViewSet, SalesItemDailyProductUSDViewSet, SalesItemDailyProductZWLViewSet, ProductSalesItemMonthlyUSDViewSet, \
     ProductSalesItemMonthlyZWLViewSet, UserMonthlySalesViewSet, UserDailySalesViewSet, SalesAllByUserViewSet, SalesLatestByUserViewSet, \
-    CurrentUserSalesDailyViewset, CurrentUserSalesMonthlyViewset
+    CurrentUserSalesDailyViewset, CurrentUserSalesMonthlyViewset, \
+    AllSalesItemByDayUSDViewSet, AllSalesItemByDayPaginatedUSDViewSet, AllSalesItemByDayZWLViewSet, AllSalesItemByDayPaginatedZWLViewSet
 
 
 
 router = routers.DefaultRouter()
 """ APP INFO """
 router.register('app-info', AppInfoViewSet, basename='app-info-viewset')
-"""  """
+# ----------------------
 router.register('product', ProductViewSet, basename='product')
 router.register('product-stock', ProductStockViewSet, basename='product-stock')
 router.register('category', CategoryViewSet, basename='category')
 router.register('currency', CurrencyViewSet, basename='currency')
 router.register('users', UserAllViewSet, basename='users-all')
-""" SALES """
+# ---------------------- SALES ---------------------
 router.register('sales', SalesViewSet, basename='sales')
 router.register('sales/daily/usd', SalesDailyUSDViewSet, basename='sales-daily-usd')
 router.register('sales/daily/zwl', SalesDailyZWLViewSet, basename='sales-daily-zwl')
@@ -54,15 +55,19 @@ router.register('sales/monthly/usd', SalesMonthlyUSDViewSet, basename='sales-mon
 router.register('sales/monthly/zwl', SalesMonthlyZWLViewSet, basename='sales-monthly-zwl')
 router.register('salesitem', SalesItemViewSet, basename='salesitem')
 router.register('salesitem/daily/product/usd', SalesItemDailyProductUSDViewSet, basename='salesitem-daily-product-usd')
-router.register('salesitem/daily/product/zwl', SalesItemDailyProductZWLViewSet, basename='salesitem-daily-product-zwl')
 router.register('sales/monthly/product/usd', ProductSalesItemMonthlyUSDViewSet, basename='sales-product-monthly-usd')
+router.register('salesitem/daily/product/zwl', SalesItemDailyProductZWLViewSet, basename='salesitem-daily-product-zwl')
 router.register('sales/monthly/product/zwl', ProductSalesItemMonthlyZWLViewSet, basename='sales-product-monthly-zwl')
-router.register('sales/monthly/byuser', UserMonthlySalesViewSet, basename='sales-monthly-byuser')
 router.register('sales/daily/byuser', UserDailySalesViewSet, basename='sales-daily-byuser')
+router.register('sales/monthly/byuser', UserMonthlySalesViewSet, basename='sales-monthly-byuser')
 router.register('sales/byuser/all', SalesAllByUserViewSet, basename='sales-byuser-all')
 router.register('sales/byuser/latest', SalesLatestByUserViewSet, basename='sales-byuser-latest')
 router.register('current-userdaily/sales', CurrentUserSalesDailyViewset, basename='sales-daily-current-user')
 router.register('current-usermonthly/sales', CurrentUserSalesMonthlyViewset, basename='sales-monthly-current-user')
+router.register('all-salesitem-byday/usd', AllSalesItemByDayUSDViewSet, basename='all-salesitem-byday-usd')
+router.register('all-salesitem-byday-paginated/usd', AllSalesItemByDayPaginatedUSDViewSet, basename='all-salesitem-byday-paginated-usd')
+router.register('all-salesitem-byday/zwl', AllSalesItemByDayZWLViewSet, basename='all-salesitem-byday-zwl')
+router.register('all-salesitem-byday-paginated/zwl', AllSalesItemByDayPaginatedZWLViewSet, basename='all-salesitem-byday-paginated-zwl')
 # ---------------------- PURCHASE ----------------------
 router.register('supplier', SupplierViewSet)
 router.register('purchase', PurchaseViewSet)
