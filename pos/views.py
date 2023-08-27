@@ -234,9 +234,13 @@ class AllSalesItemByDayUSDViewSet(viewsets.ModelViewSet):
         queryset = super().get_queryset()
         created_at = self.request.query_params.get('created_at')
         if created_at:
-            queryset = queryset.filter(currency='USD', created_at=created_at).order_by('product_name')
+            queryset = queryset.filter(currency='USD', created_at=created_at).values('product_id', 'product_name', 'currency', 'created_at') \
+                .annotate(quantity_sold=Sum('quantity_sold'), total_price=Sum('total_price')).order_by('product_name')
         return queryset
 
+""" 
+['product_id', 'product_name', 'currency', 'created_at', 'quantity_sold', 'total_price']
+ """
 
 class AllSalesItemByDayZWLViewSet(viewsets.ModelViewSet):
     queryset = SalesItem.objects.all().order_by('product_name', '-created_at')
@@ -246,7 +250,8 @@ class AllSalesItemByDayZWLViewSet(viewsets.ModelViewSet):
         queryset = super().get_queryset()
         created_at = self.request.query_params.get('created_at')
         if created_at:
-            queryset = queryset.filter(currency='ZWL', created_at=created_at).order_by('product_name')
+            queryset = queryset.filter(currency='ZWL', created_at=created_at).values('product_id', 'product_name', 'currency', 'created_at') \
+                .annotate(quantity_sold=Sum('quantity_sold'), total_price=Sum('total_price')).order_by('product_name')
         return queryset
 
 
@@ -259,7 +264,8 @@ class AllSalesItemByDayPaginatedUSDViewSet(viewsets.ModelViewSet):
         queryset = super().get_queryset()
         created_at = self.request.query_params.get('created_at')
         if created_at:
-            queryset = queryset.filter(currency='USD', created_at=created_at).order_by('product_name')
+            queryset = queryset.filter(currency='USD', created_at=created_at).values('product_id', 'product_name', 'currency', 'created_at') \
+                .annotate(quantity_sold=Sum('quantity_sold'), total_price=Sum('total_price')).order_by('product_name')
         return queryset
 
 
@@ -272,7 +278,8 @@ class AllSalesItemByDayPaginatedZWLViewSet(viewsets.ModelViewSet):
         queryset = super().get_queryset()
         created_at = self.request.query_params.get('created_at')
         if created_at:
-            queryset = queryset.filter(currency='ZWL', created_at=created_at).order_by('product_name')
+            queryset = queryset.filter(currency='ZWL', created_at=created_at).values('product_id', 'product_name', 'currency', 'created_at') \
+                .annotate(quantity_sold=Sum('quantity_sold'), total_price=Sum('total_price')).order_by('product_name')
         return queryset
 
 
