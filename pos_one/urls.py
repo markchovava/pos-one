@@ -26,7 +26,9 @@ from product.views import ProductViewSet, ProductStockViewSet, CategoryViewSet
 # --------------------- PURCHASE --------------------- 
 from purchase.views import SupplierViewSet, PurchaseItemViewSet, PurchaseViewSet, PurchaseItemDailyProductUSDViewSet, \
     PurchaseItemDailyProductZWLViewSet, PurchaseItemMonthlyProductUSDViewSet, PurchaseItemMonthlyProductZWLViewSet, \
-    PurchaseMonthlySupplierViewSet, PurchaseDailySupplierViewSet
+    PurchaseMonthlySupplierViewSet, PurchaseDailySupplierViewSet, \
+    PurchaseDailyUSDViewSet, PurchaseDailyZWLViewSet, \
+    AllPurchaseItemByDayUSDViewSet, AllPurchaseItemByDayZWLViewSet, AllPurchaseItemByDayPaginatedUSDViewSet, AllPurchaseItemByDayPaginatedZWLViewSet
 # --------------------- CORE --------------------- 
 from core.views import UserAllViewSet, AppInfoViewSet
 # --------------------- POINT OF SALE --------------------- 
@@ -68,14 +70,22 @@ router.register('all-salesitem-byday/usd', AllSalesItemByDayUSDViewSet, basename
 router.register('all-salesitem-byday-paginated/usd', AllSalesItemByDayPaginatedUSDViewSet, basename='all-salesitem-byday-paginated-usd')
 router.register('all-salesitem-byday/zwl', AllSalesItemByDayZWLViewSet, basename='all-salesitem-byday-zwl')
 router.register('all-salesitem-byday-paginated/zwl', AllSalesItemByDayPaginatedZWLViewSet, basename='all-salesitem-byday-paginated-zwl')
-# ---------------------- PURCHASE ----------------------
+# ---------------------- SUPPLIER ----------------------
 router.register('supplier', SupplierViewSet)
+# ---------------------- PURCHASE ----------------------
 router.register('purchase', PurchaseViewSet)
+router.register('purchase-daily/usd', PurchaseDailyUSDViewSet, basename='purchase-daily-usd')
+router.register('purchase-daily/zwl', PurchaseDailyZWLViewSet, basename='purchase-daily-zwl')
 router.register('purchase-item', PurchaseItemViewSet)
 router.register('purchase-item-daily/usd', PurchaseItemDailyProductUSDViewSet, basename='purchase-item-daily-usd')
 router.register('purchase-item-daily/zwl', PurchaseItemDailyProductZWLViewSet, basename='purchase-item-daily-zwl')
 router.register('purchase-item-monthly/usd', PurchaseItemMonthlyProductUSDViewSet, basename='purchase-item-monthly-usd')
 router.register('purchase-item-monthly/zwl', PurchaseItemMonthlyProductZWLViewSet, basename='purchase-item-monthly-zwl')
+router.register('purchase-item-byday/usd', AllPurchaseItemByDayUSDViewSet, basename='purchase-item-byday-usd')
+router.register('purchase-item-byday/zwl', AllPurchaseItemByDayZWLViewSet, basename='purchase-item-byday-zwl')
+router.register('purchase-item-byday-paginated/usd', AllPurchaseItemByDayPaginatedUSDViewSet, basename='purchase-item-byday-paginated-usd')
+router.register('purchase-item-byday-paginated/zwl', AllPurchaseItemByDayPaginatedZWLViewSet, basename='purchase-item-byday-paginated-zwl')
+
 router.register('purchase-supplier-monthly', PurchaseMonthlySupplierViewSet, basename='purchase-supplier-monthly')
 router.register('purchase-supplier-daily', PurchaseDailySupplierViewSet, basename='purchase-supplier-daily')
 

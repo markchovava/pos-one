@@ -159,7 +159,7 @@ class UserDailySalesViewSet(viewsets.ModelViewSet):
 
 
 
-""" -------------------------USER ------------------------------------- """
+# ------------------------- USER ------------------------------------- 
 class SalesAllByUserViewSet(viewsets.ModelViewSet):
     queryset = Sales.objects.prefetch_related('sales_items').all().order_by('-created_at')
     serializer_class = SalesAllByUserSerializer
@@ -188,7 +188,7 @@ class SalesLatestByUserViewSet(viewsets.ModelViewSet):
         return queryset[:1]
 
 
-""" ------------------------- CURRENT USER ------------------------------------- """
+# ------------------------- CURRENT USER -------------------------------------
 class CurrentUserSalesDailyViewset(viewsets.ModelViewSet):
     queryset = Sales.objects.prefetch_related('sales_items').all()
     serializer_class = CurrentUserSalesDailySerializer
@@ -225,7 +225,7 @@ class CurrentUserSalesMonthlyViewset(viewsets.ModelViewSet):
         return queryset        
 
 
-# ---------------------------- ALL SALES BY DAY ----------------------------------------------------------- 
+# ---------------------------- ALL SALES BY DAY ------------------------------------ 
 class AllSalesItemByDayUSDViewSet(viewsets.ModelViewSet):
     queryset = SalesItem.objects.all().order_by('product_name', '-created_at')
     serializer_class = AllSalesItemByDaySerializer
@@ -238,9 +238,7 @@ class AllSalesItemByDayUSDViewSet(viewsets.ModelViewSet):
                 .annotate(quantity_sold=Sum('quantity_sold'), total_price=Sum('total_price')).order_by('product_name')
         return queryset
 
-""" 
-['product_id', 'product_name', 'currency', 'created_at', 'quantity_sold', 'total_price']
- """
+
 
 class AllSalesItemByDayZWLViewSet(viewsets.ModelViewSet):
     queryset = SalesItem.objects.all().order_by('product_name', '-created_at')
