@@ -4,9 +4,9 @@ from rest_framework.filters import SearchFilter
 from .pagination import StandardResultsSetPagination
 from rest_framework.response import Response
 from .models import Product, Category
-from .serializers import ProductSerializer, EditProductSerializer, CategorySerializer
+from .serializers import ProductSerializer, EditProductSerializer, CategorySerializer, \
+              ProductPriceSerializer
 
-# Create your views here.
 
 class ProductViewSet(viewsets.ModelViewSet):
   queryset = Product.objects.prefetch_related('category__product').all().order_by('name')
@@ -35,6 +35,23 @@ class CategoryViewSet(viewsets.ModelViewSet):
   filter_backends = [SearchFilter]
   search_fields = ['name']
   ordering_fields = ['name', 'updated_at']
+
+
+class ProductPriceViewSet(viewsets.ModelViewSet):
+  queryset = Product.objects.all().order_by('-updated_at', 'name')
+  serializer_class = ProductPriceSerializer
+  filter_backends = [SearchFilter]
+  search_fields = ['name', 'barcode']
+  pagination_class = StandardResultsSetPagination
+
+  def update(self, request, *args, **kwargs):
+    products = request.data.get('products', [])
+    for product in products:
+        product_id = product["id"]
+        Product.objects.filter(id=product_id).update(**product)
+    return Response(status=200)
+
+
 
 
 

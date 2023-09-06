@@ -22,7 +22,7 @@ from rest_framework_simplejwt.views import (
 )
 from rest_framework import routers
 # --------------------- PRODUCT --------------------- 
-from product.views import ProductViewSet, ProductStockViewSet, CategoryViewSet
+from product.views import ProductViewSet, ProductStockViewSet, CategoryViewSet, ProductPriceViewSet
 # --------------------- PURCHASE --------------------- 
 from purchase.views import SupplierViewSet, PurchaseItemViewSet, PurchaseViewSet, PurchaseItemDailyProductUSDViewSet, \
     PurchaseItemDailyProductZWLViewSet, PurchaseItemMonthlyProductUSDViewSet, PurchaseItemMonthlyProductZWLViewSet, \
@@ -49,6 +49,8 @@ router.register('product-stock', ProductStockViewSet, basename='product-stock')
 router.register('category', CategoryViewSet, basename='category')
 router.register('currency', CurrencyViewSet, basename='currency')
 router.register('users', UserAllViewSet, basename='users-all')
+# -------------- PRICE --------------------
+router.register('product-price', ProductPriceViewSet, basename='product-price')
 # ---------------------- SALES ---------------------
 router.register('sales', SalesViewSet, basename='sales')
 router.register('sales/daily/usd', SalesDailyUSDViewSet, basename='sales-daily-usd')

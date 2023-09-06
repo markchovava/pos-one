@@ -35,7 +35,7 @@ class SalesViewSet(viewsets.ModelViewSet):
     pagination_class = StandardResultsSetPagination
     ordering_fields = ['-created_at']
  
-
+ 
 class SalesItemViewSet(viewsets.ModelViewSet):
     queryset = SalesItem.objects.all().order_by('-created_at')
     serializer_class = SalesItemSerializer

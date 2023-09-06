@@ -1,0 +1,15 @@
+{
+	"products": [{
+			"id": 2,
+			"name": "Banana",
+			"unit_price": 100,
+			"user_id": 1
+		},
+		{
+			"id": 3,
+			"name": "Bnana",
+			"unit_price": 100,
+			"user_id": 1
+		}
+	]
+}

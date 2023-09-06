@@ -31,3 +31,15 @@ class EditProductSerializer(serializers.ModelSerializer):
    class Meta:
       model = Product
       fields = ['id', 'name', 'user','description', 'barcode', 'unit_price', 'quantity', 'brand', 'category_id', 'user_id']
+
+
+
+class ProductPriceSerializer(serializers.ModelSerializer):
+   id = serializers.IntegerField(allow_null=False)
+   user_id = serializers.IntegerField(allow_null=True)
+
+   class Meta:
+      model = Product
+      fields = ['id', 'name', 'unit_price', 'user_id', 'updated_at']
+
+  
